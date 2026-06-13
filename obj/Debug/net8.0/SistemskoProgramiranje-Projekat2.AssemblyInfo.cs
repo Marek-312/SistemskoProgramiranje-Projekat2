@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SistemskoProgramiranje-Projekat2")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+34493e420356cea016282dcd7187cfe93dad79b5")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+dccc0ce80df9a6e624e5fb10fb63af48232151a7")]
 [assembly: System.Reflection.AssemblyProductAttribute("SistemskoProgramiranje-Projekat2")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SistemskoProgramiranje-Projekat2")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
