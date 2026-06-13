@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Mare Skola\\sistemsko\\SistemskoProgramiranje-Projekat2\\SistemskoProgramiranje-Projekat2.csproj": {}
+    "C:\\Users\\Marko\\Desktop\\Mare Skola\\Sistemsko programiranje\\SistemskoProgramiranje-Projekat2\\SistemskoProgramiranje-Projekat2.csproj": {}
   },
   "projects": {
-    "D:\\Mare Skola\\sistemsko\\SistemskoProgramiranje-Projekat2\\SistemskoProgramiranje-Projekat2.csproj": {
+    "C:\\Users\\Marko\\Desktop\\Mare Skola\\Sistemsko programiranje\\SistemskoProgramiranje-Projekat2\\SistemskoProgramiranje-Projekat2.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Mare Skola\\sistemsko\\SistemskoProgramiranje-Projekat2\\SistemskoProgramiranje-Projekat2.csproj",
+        "projectUniqueName": "C:\\Users\\Marko\\Desktop\\Mare Skola\\Sistemsko programiranje\\SistemskoProgramiranje-Projekat2\\SistemskoProgramiranje-Projekat2.csproj",
         "projectName": "SistemskoProgramiranje-Projekat2",
-        "projectPath": "D:\\Mare Skola\\sistemsko\\SistemskoProgramiranje-Projekat2\\SistemskoProgramiranje-Projekat2.csproj",
-        "packagesPath": "C:\\Users\\STRONG\\.nuget\\packages\\",
-        "outputPath": "D:\\Mare Skola\\sistemsko\\SistemskoProgramiranje-Projekat2\\obj\\",
+        "projectPath": "C:\\Users\\Marko\\Desktop\\Mare Skola\\Sistemsko programiranje\\SistemskoProgramiranje-Projekat2\\SistemskoProgramiranje-Projekat2.csproj",
+        "packagesPath": "C:\\Users\\Marko\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Marko\\Desktop\\Mare Skola\\Sistemsko programiranje\\SistemskoProgramiranje-Projekat2\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\STRONG\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Marko\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -64,7 +64,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.421/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
