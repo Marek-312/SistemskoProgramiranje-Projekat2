@@ -6,8 +6,8 @@ namespace PalindromeServer
 {
     public class Logger : IDisposable
     {
-        private readonly Object _loggerLock;
-        private readonly StreamWriter _streamWriter;
+        private readonly static Object _loggerLock;
+        private readonly static StreamWriter _streamWriter;
         //public readonly string path;
         public enum Metode
         {
@@ -25,7 +25,7 @@ namespace PalindromeServer
 
 
         }
-        public void Log(string message, Metode metoda, string identifikator)
+        public static void Log(string message, Metode metoda, string identifikator)
         {
             string logMessage;
             if (metoda == Metode.Info)
