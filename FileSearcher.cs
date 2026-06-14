@@ -10,7 +10,7 @@ namespace PalindromeServer
     public class SearchResult
     {
         public int PalindromeCount { get; set; }
-        public List<string> Palindromes { get; set; }
+        public List<string>? Palindromes { get; set; }
         public string FileName { get; set; }
     }
     public class FileSearcher

@@ -1,84 +1,144 @@
 using System;
-using System.ComponentModel;
+using System.Collections.Generic;
 using System.Net;
-using System.Net.Http.Headers;
-using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualBasic;
+
 namespace PalindromeServer
 {
     public class RequestProcessor
     {
-        public readonly RequestQueue _requestQueue;
-        public readonly FileSearcher _fileSearcher;
+        private readonly RequestQueue _requestQueue;
+        private readonly FileSearcher _fileSearcher;
+        private readonly Cache<string, SearchResult> _cache;
+        private readonly CancellationToken _token;
+        private readonly Logger Logger;
+        private readonly int _workerCount;
 
-        public readonly Cache<string, int> _cache;
-        public readonly CancellationToken _token;
-
-        public readonly int _workerCount;
-
-        public RequestProcessor(RequestQueue requestQueue, FileSearcher fileSearcher, Cache<string, int> cache, CancellationToken token, int WorkerCount = 4)
+        public RequestProcessor(
+            RequestQueue requestQueue,
+            FileSearcher fileSearcher,
+            Cache<string, SearchResult> cache,
+            Logger log,
+            CancellationToken token,
+            int workerCount = 4)
         {
             _requestQueue = requestQueue;
             _fileSearcher = fileSearcher;
             _cache = cache;
-            _token = requestQueue._token;
-            _workerCount = WorkerCount;
+            Logger = log;
+            _token = token;
+            _workerCount = workerCount;
         }
-        public async Task<List<Task>> Start()
+
+        public List<Task> Start()
         {
-            List<Task> task = new List<Task>(_workerCount);
+            List<Task> tasks = new List<Task>();
             for (int i = 0; i < _workerCount; i++)
             {
-                task[i] = Task.Run(() => Worker());
+                tasks.Add(Task.Run(() => Worker(), _token));
             }
-
-            for (int i = 0; i < _workerCount; i++)
-            {
-
-            }
-
-            return task;
+            return tasks;
         }
+
         private void Worker()
+        {
+            while (!_token.IsCancellationRequested)
+            {
+                try
+                {
+                    HttpListenerContext context = _requestQueue.removeContext();
+                    string path = context.Request.Url.AbsolutePath.TrimStart('/');
+
+                    if (string.IsNullOrWhiteSpace(path))
+                    {
+                        SendError(context, 400, "Naziv fajla ne sme biti prazan.");
+                        continue;
+                    }
+
+                    Logger.Log($"Obrada zahteva za fajl: {path}", Logger.Metode.Info, "PROCESSOR");
+
+                    if (_cache.TryGet(path, out SearchResult cached))
+                    {
+                        Logger.Log($"Kes hit za: {path}", Logger.Metode.Info, "PROCESSOR");
+                        SendResponse(context, cached);
+                        continue;
+                    }
+
+                    _fileSearcher.SearchAsync(path)
+                        .ContinueWith(t =>
+                        {
+                            if (t.IsFaulted)
+                            {
+                                Logger.Log($"Greska pri pretrazi: {t.Exception?.InnerException?.Message}", Logger.Metode.Error, "PROCESSOR");
+                                SendError(context, 404, $"Fajl '{path}' nije pronadjen.");
+                                return;
+                            }
+                            _cache.Add(path, t.Result);
+                            Logger.Log($"Rezultat kaciran za: {path}", Logger.Metode.Info, "PROCESSOR");
+                        }, TaskScheduler.Default)
+                        .ContinueWith(t =>
+                        {
+                            if (_cache.TryGet(path, out SearchResult result))
+                            {
+                                SendResponse(context, result);
+                            }
+                        }, TaskScheduler.Default);
+                }
+                catch (OperationCanceledException)
+                {
+                    Logger.Log("Worker zaustavljen.", Logger.Metode.Info, "PROCESSOR");
+                    break;
+                }
+                catch (Exception e)
+                {
+                    Logger.Log($"Neocekivana greska: {e.Message}", Logger.Metode.Error, "PROCESSOR");
+                }
+            }
+        }
+
+        private void SendResponse(HttpListenerContext context, SearchResult result)
         {
             try
             {
-                HttpListenerContext context = _requestQueue.removeContext();
-                string path = context.Request.Url.AbsolutePath;
-                path.TrimStart();
-                if (string.IsNullOrWhiteSpace(path))
+                string body;
+                if (result.PalindromeCount == 0)
                 {
-                    throw new Exception("Prazan path");
-                }
-
-                if (_cache.TryGet(path, out int value))
-                {
-                    Logger.Log("KES HIT", Logger.Metode.Info, "Request processor");
-                    return;
+                    body = $"U fajlu '{result.FileName}' nisu pronadjeni palindromi.";
                 }
                 else
                 {
-                    Task<SearchResult> searchResult = _fileSearcher.SearchAsync(path);
-                    searchResult.ContinueWith(t => _cache.Add(t.Result.FileName, t.Result.PalindromeCount));
-                    .ContinueWith(s => SendResponse(+));
-
-                    //return fileReaserhced.Result.PalindromeCount;
-
+                    string lista = string.Join(", ", result.Palindromes);
+                    body = $"U fajlu '{result.FileName}' pronadjeno je {result.PalindromeCount} palindroma: {lista}";
                 }
 
+                byte[] buffer = Encoding.UTF8.GetBytes(body);
+                context.Response.StatusCode = 200;
+                context.Response.ContentType = "text/plain; charset=utf-8";
+                context.Response.ContentLength64 = buffer.Length;
+                context.Response.OutputStream.Write(buffer, 0, buffer.Length);
             }
-            catch (OperationCanceledException)
+            finally
             {
-                Logger.Log("Cancelation token activated", Logger.Metode.Error, "Request processor");
-            }
-            catch (Exception e)
-            {
-                Logger.Log(e.Message, Logger.Metode.Error, "Request processor");
+                context.Response.OutputStream.Close();
             }
         }
 
-
+        private void SendError(HttpListenerContext context, int statusCode, string message)
+        {
+            try
+            {
+                byte[] buffer = Encoding.UTF8.GetBytes(message);
+                context.Response.StatusCode = statusCode;
+                context.Response.ContentType = "text/plain; charset=utf-8";
+                context.Response.ContentLength64 = buffer.Length;
+                context.Response.OutputStream.Write(buffer, 0, buffer.Length);
+            }
+            finally
+            {
+                context.Response.OutputStream.Close();
+            }
+        }
     }
 }
