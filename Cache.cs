@@ -19,7 +19,7 @@ public class Cache<TKey, TValue> : IDisposable
         public DateTime ExpirationTime { get; set; }
     }
 
-    public Cache(TimeSpan defaultExpiration, string path, int MaxSize)
+    public Cache(TimeSpan defaultExpiration, int MaxSize = 5)
     {
         _cache = new Dictionary<TKey, CacheItem<TValue>>(MaxSize);
         _defaultExpiration = defaultExpiration;

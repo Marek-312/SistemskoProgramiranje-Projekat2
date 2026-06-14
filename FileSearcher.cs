@@ -20,7 +20,7 @@ namespace PalindromeServer
 
 
 
-        public FileSearcher(string rootFolder, Logger log)
+        public FileSearcher(string rootFolder)
         {
             if (!Directory.Exists(rootFolder))
                 throw new DirectoryNotFoundException($"Root folder ne postoji: {rootFolder}");

@@ -3,3 +3,13 @@ C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje
 C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\obj\Debug\net8.0\SistemskoProgramiranje-Projekat2.AssemblyInfo.cs
 C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\obj\Debug\net8.0\SistemskoProgramiranje-Projekat2.csproj.CoreCompileInputs.cache
 C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\obj\Debug\net8.0\SistemskoProgramiranje-Projekat2.sourcelink.json
+C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\bin\Debug\net8.0\SistemskoProgramiranje-Projekat2.exe
+C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\bin\Debug\net8.0\SistemskoProgramiranje-Projekat2.deps.json
+C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\bin\Debug\net8.0\SistemskoProgramiranje-Projekat2.runtimeconfig.json
+C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\bin\Debug\net8.0\SistemskoProgramiranje-Projekat2.dll
+C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\bin\Debug\net8.0\SistemskoProgramiranje-Projekat2.pdb
+C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\obj\Debug\net8.0\SistemskoProgramiranje-Projekat2.dll
+C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\obj\Debug\net8.0\refint\SistemskoProgramiranje-Projekat2.dll
+C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\obj\Debug\net8.0\SistemskoProgramiranje-Projekat2.pdb
+C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\obj\Debug\net8.0\SistemskoProgramiranje-Projekat2.genruntimeconfig.cache
+C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\obj\Debug\net8.0\ref\SistemskoProgramiranje-Projekat2.dll

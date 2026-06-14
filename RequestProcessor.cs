@@ -13,21 +13,21 @@ namespace PalindromeServer
         private readonly FileSearcher _fileSearcher;
         private readonly Cache<string, SearchResult> _cache;
         private readonly CancellationToken _token;
-        private readonly Logger Logger;
+        //private readonly Logger Logger;
         private readonly int _workerCount;
 
         public RequestProcessor(
             RequestQueue requestQueue,
             FileSearcher fileSearcher,
             Cache<string, SearchResult> cache,
-            Logger log,
+            //Logger log,
             CancellationToken token,
             int workerCount = 4)
         {
             _requestQueue = requestQueue;
             _fileSearcher = fileSearcher;
             _cache = cache;
-            Logger = log;
+            // Logger = log;
             _token = token;
             _workerCount = workerCount;
         }

@@ -4,10 +4,10 @@ using System.IO;
 
 namespace PalindromeServer
 {
-    public class Logger : IDisposable
+    public class Logger
     {
         private readonly static Object _loggerLock = new object();
-        private readonly static string path = "path";
+        private readonly static string path = "server.Logge";
         private readonly static StreamWriter _streamWriter = new StreamWriter(path);
 
         //public readonly string path;
@@ -41,12 +41,12 @@ namespace PalindromeServer
             }
 
         }
-        public void Dispose()
-        {
-            lock (_loggerLock)
-            {
-                _streamWriter?.Dispose();
-            }
-        }
+        /* public static void Dispose()
+         {
+             lock (_loggerLock)
+             {
+                 _streamWriter?.Dispose();
+             }
+         }*/
     }
 }
