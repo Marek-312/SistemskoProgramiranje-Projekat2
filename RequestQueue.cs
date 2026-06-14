@@ -10,7 +10,7 @@ namespace PalindromeServer
 
         private readonly BlockingCollection<HttpListenerContext> blockingCollection;
 
-        private readonly CancellationToken _token;
+        public readonly CancellationToken _token;
         public RequestQueue(CancellationToken token, int maxSize = 128)
         {
             blockingCollection = new BlockingCollection<HttpListenerContext>(maxSize);

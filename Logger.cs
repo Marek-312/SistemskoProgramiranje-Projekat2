@@ -6,8 +6,10 @@ namespace PalindromeServer
 {
     public class Logger : IDisposable
     {
-        private readonly static Object _loggerLock;
-        private readonly static StreamWriter _streamWriter;
+        private readonly static Object _loggerLock = new object();
+        private readonly static string path = "path";
+        private readonly static StreamWriter _streamWriter = new StreamWriter(path);
+
         //public readonly string path;
         public enum Metode
         {
@@ -15,19 +17,11 @@ namespace PalindromeServer
             Warning,
             Error,
         }
-        public Logger(string path)
-        {
 
-            _loggerLock = new object();
-            _streamWriter = new StreamWriter(path);
-            if (_streamWriter != null)
-                _streamWriter.AutoFlush = true;
-
-
-        }
         public static void Log(string message, Metode metoda, string identifikator)
         {
             string logMessage;
+            _streamWriter.AutoFlush = true;
             if (metoda == Metode.Info)
             {
                 logMessage = "[Info] " + identifikator + " " + message + " time " + DateTime.UtcNow.ToString();

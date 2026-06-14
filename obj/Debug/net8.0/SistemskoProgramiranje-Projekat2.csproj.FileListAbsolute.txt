@@ -1,0 +1,5 @@
+C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\obj\Debug\net8.0\SistemskoProgramiranje-Projekat2.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\obj\Debug\net8.0\SistemskoProgramiranje-Projekat2.AssemblyInfoInputs.cache
+C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\obj\Debug\net8.0\SistemskoProgramiranje-Projekat2.AssemblyInfo.cs
+C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\obj\Debug\net8.0\SistemskoProgramiranje-Projekat2.csproj.CoreCompileInputs.cache
+C:\Users\Marko\Desktop\Mare Skola\Sistemsko programiranje\SistemskoProgramiranje-Projekat2\obj\Debug\net8.0\SistemskoProgramiranje-Projekat2.sourcelink.json

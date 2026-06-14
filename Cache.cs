@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using System.Threading;
 using PalindromeServer;
 
-public class SimpleCache<TKey, TValue> : IDisposable
+public class Cache<TKey, TValue> : IDisposable
 {
     private readonly Dictionary<TKey, CacheItem<TValue>> _cache;
     private readonly TimeSpan _defaultExpiration;
     private readonly ReaderWriterLockSlim _lock;
     public readonly ConcurrentDictionary<TKey, SemaphoreSlim> _protection;
+    private readonly int _maxSize;
     private readonly Logger log;
 
     private class CacheItem<T>
@@ -18,13 +19,14 @@ public class SimpleCache<TKey, TValue> : IDisposable
         public DateTime ExpirationTime { get; set; }
     }
 
-    public SimpleCache(TimeSpan defaultExpiration, string path)
+    public Cache(TimeSpan defaultExpiration, string path, int MaxSize)
     {
-        _cache = new Dictionary<TKey, CacheItem<TValue>>();
+        _cache = new Dictionary<TKey, CacheItem<TValue>>(MaxSize);
         _defaultExpiration = defaultExpiration;
         _lock = new ReaderWriterLockSlim();
-        log = new Logger(path);
-        _protection = new ConcurrentDictionary<TKey, SemaphoreSlim>()
+        //log = new Logger(path);
+        _protection = new ConcurrentDictionary<TKey, SemaphoreSlim>();
+        _maxSize = MaxSize;
     }
 
     public void Add(TKey key, TValue value)
@@ -138,38 +140,90 @@ public class SimpleCache<TKey, TValue> : IDisposable
     }
     public TValue GetOrCompute(TKey key, Func<TValue> compute)
     {
-        CacheItem<TValue> x;
+
         _lock.EnterReadLock();
-
-
-        if (_cache.TryGetValue(key, out x))
+        try
         {
-            return x.Value;
+            if (_cache.TryGetValue(key, out var existing))
+            {
+                if (existing.ExpirationTime > DateTime.UtcNow)
+                {
+                    Logger.Log($"Kes hit za kljuc: {key}", Logger.Metode.Info, "KES");
+                    return existing.Value;
+                }
+            }
         }
-        _lock.ExitReadLock();
-        SemaphoreSlim slim = new SemaphoreSlim(1, 1);
-        if (_protection.TryAdd(key, slim))
+        finally
         {
-            TValue s = compute();
+            _lock.ExitReadLock();
+        }
 
-            x.Value = s;
-            x.ExpirationTime = DateTime.UtcNow + _defaultExpiration;
-            _lock.EnterWriteLock();
-            _cache.Add(key, x);
-            _lock.ExitWriteLock();
-            _protection.TryRemove(key, out slim);
-            return s;
+
+        SemaphoreSlim newSlim = new SemaphoreSlim(1, 1);
+        newSlim.Wait();
+
+        if (_protection.TryAdd(key, newSlim))
+        {
+
+            try
+            {
+                Logger.Log($"Kes miss, racunanje za kljuc: {key}", Logger.Metode.Info, "KES");
+                TValue computed = compute();
+
+
+                _lock.EnterWriteLock();
+                try
+                {
+                    _cache[key] = new CacheItem<TValue>
+                    {
+                        Value = computed,
+                        ExpirationTime = DateTime.UtcNow.Add(_defaultExpiration)
+                    };
+                }
+                finally
+                {
+                    _lock.ExitWriteLock();
+                }
+
+                return computed;
+            }
+            finally
+            {
+
+                _protection.TryRemove(key, out _);
+                newSlim.Release();
+            }
         }
         else
         {
 
-            slim.Wait();
+            newSlim.Release();
+
+
+            if (_protection.TryGetValue(key, out SemaphoreSlim existingSlim))
+            {
+                existingSlim.Wait();
+                existingSlim.Release();
+            }
+
+
             _lock.EnterReadLock();
-            CacheItem<TValue> pls;
-            _cache.TryGetValue(key, out pls);
-            _lock.ExitReadLock();
-            slim.Release();
-            return pls.Value;
+            try
+            {
+                if (_cache.TryGetValue(key, out var computed))
+                {
+                    Logger.Log($"Preuzeta vrednost iz kesa nakon cekanja za kljuc: {key}", Logger.Metode.Info, "KES");
+                    return computed.Value;
+                }
+
+
+                Logger.Log($"Vrednost nije u kesu nakon cekanja, racunanje za kljuc: {key}", Logger.Metode.Warning, "KES");
+                return compute();
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
     }
 }
